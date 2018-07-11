@@ -9,6 +9,7 @@ import web
 import base64
 import requests
 import json
+import cv2 as cv
 render=web.template.render("templates/")
 
 
@@ -53,6 +54,9 @@ def get_result(b64):
         'User-Agent': 'Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 4 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
     result=requests.post(url,data=jstring,headers=headers).json()
     return result
+
+def opencv_rec_image():
+    pass
 
 
 if __name__=='__main__':
