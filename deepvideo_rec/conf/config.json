@@ -5,7 +5,7 @@
   },
 
   "log":{
-    "debug":false
+    "debug":true
   },
   "rec_config":{
     "rec_url":"211.103.220.74:8014"
