@@ -47,6 +47,7 @@ def rec_local():
 
         result["image"] = b64_rec
 
+
         return json.dumps(result)
     else:
         logging.error("image rec failure")
