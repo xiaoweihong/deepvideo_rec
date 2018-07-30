@@ -10,7 +10,8 @@ import base64
 import json
 from tools import image_handler
 
-url = "http://39.106.146.155:6501/rec/image"
+# url = "http://192.168.2.117:6501/rec/image"
+url = "http://211.103.220.74:8014/rec/image"
 
 render=web.template.render("templates/")
 
@@ -43,13 +44,11 @@ class det_local:
         result={"data":None,"image":None}
 
         b64=base64.b64encode(data['local_image'])
-        b64=b64.decode('utf-8')
 
-        print(b64)
+        b64=b64.decode('utf-8')
 
         result_data=image_handler.get_request_result(b64,url)
 
-        print(result_data)
 
         result["data"]=result_data
 

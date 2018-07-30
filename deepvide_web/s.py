@@ -55,6 +55,8 @@ for vehicle in vehicles_list:
     cv.rectangle(img,(vehicle_x,vehicle_y),(vehicle_x+vehicle_width,vehicle_y+vehicle_height),(255,0,0),2,4,0)
 
 image=cv.imencode('.jpg', img)[1]
+a=cv.imwrite("convert.jpg",img)
+
 s=str(base64.b64encode(image))
 print(s)
 # print(url_to_image(pic_url))
