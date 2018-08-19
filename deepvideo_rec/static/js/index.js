@@ -8,9 +8,11 @@ $(function()
     // bind click to submit online image detect
     $("#online_image_submit").click(function()
     {
-        $.post("/detect/online", {"online_image_url": $("#online_image_url").val()}, function(data, status, xhr){
+        $.post("/rec/online", {"online_image_url": $("#online_image_url").val()}, function(data, status, xhr){
             $("#json_result").text(JSON.stringify(data, null, 4))
-            $("#image_result").attr("src", data["image"])
+            $("#json_text").text(JSON.stringify(data["result_data"], null, 4));
+                $("#image_result").attr("src","data:image/jpeg;base64,"+data["image"]);
+                $("#image_result").before("<div class='image_a'></div>");
         }, "json");
     });
 
@@ -22,6 +24,7 @@ $(function()
                 console.log(data)
                 result=data["data"];
                 $("#json_result").text(JSON.stringify(data["data"], null, 4));
+                $("#json_text").text(JSON.stringify(data["result_data"], null, 4));
                 $("#image_result").attr("src","data:image/jpeg;base64,"+data["image"]);
                 $("#image_result").before("<div class='image_a'></div>");
             },

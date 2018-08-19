@@ -17,7 +17,6 @@ logging.basicConfig(
             format='%(asctime)s,%(msecs)05.1f %(filename)s(%(funcName)s):%(lineno)s %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S')
 from flask import Flask,render_template,request
-# url = "http://211.103.220.74:8014/rec/image"
 
 
 app=Flask(__name__,template_folder="templates",static_url_path="")
@@ -32,20 +31,27 @@ def first_flask():
 @app.route('/rec/local',methods=['POST'])
 def rec_local():
     data=request.files["local_image"].read()
-    result = {"data": None, "image": None}
+    result = {"data": None, "image": None,"result_data":None}
 
     b64 = base64.b64encode(data)
 
     b64 = b64.decode('utf-8')
 
     result_data = image_handler.get_request_result(b64, _http_rec_url)
+
     if result_data:
 
         result["data"] = result_data
 
-        b64_rec = image_handler.opencv_rec_image(b64, result)
+        rec_result_from_opcv=image_handler.opencv_rec_image(b64, result)
+
+        b64_rec = rec_result_from_opcv["image_base64_str"]
 
         result["image"] = b64_rec
+
+        result["result_data"]=rec_result_from_opcv["rec_result"]
+
+        logging.debug(result["result_data"])
 
 
         return json.dumps(result)
@@ -54,6 +60,40 @@ def rec_local():
         result["data"] = "rec image failure"
         result["image"] = b64
         return json.dumps(result)
+
+
+@app.route('/rec/online',methods=['POST'])
+def rec_online():
+    result = {"data": None, "image": None, "result_data": None}
+    pic_url=request.values['online_image_url']
+    logging.debug("图片地址:{}".format(pic_url))
+
+    b64=image_handler.get_pic_base64(pic_url)
+    b64 = b64.decode('utf-8')
+    result_data = image_handler.get_request_result(b64, _http_rec_url)
+    logging.debug(result_data)
+    if result_data:
+
+        result["data"] = result_data
+
+        rec_result_from_opcv=image_handler.opencv_rec_image(b64, result)
+
+        b64_rec = rec_result_from_opcv["image_base64_str"]
+
+        result["image"] = b64_rec
+
+        result["result_data"]=rec_result_from_opcv["rec_result"]
+
+        logging.debug(result["result_data"])
+
+
+        return json.dumps(result)
+    else:
+        logging.error("image rec failure")
+        result["data"] = "rec image failure"
+        result["image"] = b64
+        return json.dumps(result)
+
 
 
 if __name__ == '__main__':
