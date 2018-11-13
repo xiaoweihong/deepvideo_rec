@@ -5,9 +5,10 @@
   },
 
   "log":{
-    "debug":true
+    "debug":false
   },
+  "face":true,
   "rec_config":{
-    "rec_url":"211.103.220.74:8014"
+    "rec_url":"192.168.2.66:6801"
   }
 }

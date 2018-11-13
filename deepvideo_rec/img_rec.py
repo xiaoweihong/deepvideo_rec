@@ -27,7 +27,6 @@ app.debug=True
 def first_flask():
     return render_template("index.html")
 
-
 @app.route('/rec/local',methods=['POST'])
 def rec_local():
     data=request.files["local_image"].read()
@@ -37,7 +36,7 @@ def rec_local():
 
     b64 = b64.decode('utf-8')
 
-    result_data = image_handler.get_request_result(b64, _http_rec_url)
+    result_data = image_handler.get_request_result(b64, _http_rec_url,_face)
 
     if result_data:
 
@@ -52,7 +51,6 @@ def rec_local():
         result["result_data"]=rec_result_from_opcv["rec_result"]
 
         logging.debug(result["result_data"])
-
 
         return json.dumps(result)
     else:
@@ -70,8 +68,7 @@ def rec_online():
 
     b64=image_handler.get_pic_base64(pic_url)
     b64 = b64.decode('utf-8')
-    result_data = image_handler.get_request_result(b64, _http_rec_url)
-    logging.debug(result_data)
+    result_data = image_handler.get_request_result(b64, _http_rec_url,_face)
     if result_data:
 
         result["data"] = result_data
@@ -83,9 +80,6 @@ def rec_online():
         result["image"] = b64_rec
 
         result["result_data"]=rec_result_from_opcv["rec_result"]
-
-        logging.debug(result["result_data"])
-
 
         return json.dumps(result)
     else:
@@ -117,6 +111,7 @@ if __name__ == '__main__':
     _http_port = 8888
     _http_debug = False
     _http_rec_url="localhost:6505"
+    _face=False
 
     if "http" in TYPES_CONFIG:
         _http=TYPES_CONFIG["http"]
@@ -130,6 +125,9 @@ if __name__ == '__main__':
             logging.getLogger().setLevel(logging.DEBUG)
         else:
             logging.getLogger().setLevel(logging.INFO)
+    if "face" in TYPES_CONFIG:
+        _face = TYPES_CONFIG["face"]
+
     if "rec_config" in TYPES_CONFIG:
         _http_rec_url=TYPES_CONFIG["rec_config"]
         _http_rec_url="http://{}/rec/image".format(_http_rec_url["rec_url"])
